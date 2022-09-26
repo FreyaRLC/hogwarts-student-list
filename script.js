@@ -72,7 +72,7 @@ function showData(students) {
   students.forEach((student) => {
     const clone = template.cloneNode(true);
     clone.querySelector(".firstname").textContent = student.firstname;
-    clone.querySelector(".nickname").textContent = student.nickname;
+    // clone.querySelector(".nickname").textContent = student.nickname;
     clone.querySelector(".middlename").textContent = student.middlename;
     clone.querySelector(".lastname").textContent = student.lastname;
     clone.querySelector(".gender").textContent = student.gender;
