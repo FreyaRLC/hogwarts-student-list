@@ -44,6 +44,9 @@ th {
   min-width: 110px !important;
   padding: 10px 0;
   text-align: start;
+  user-select: none;
+  -webkit-user-select: none; /* for Safari */
+  -ms-user-select: none; /* for IE */
 }
 tr {
   color: white;

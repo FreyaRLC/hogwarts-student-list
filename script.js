@@ -11,6 +11,9 @@ const studentObj = {
   lastname: "",
   gender: "",
   house: "",
+  prefect: false,
+  inquis: false,
+  expelled: false,
 };
 const settings = {
   filter: "all",
@@ -36,7 +39,6 @@ async function loadJSON() {
   const jsonData = await response.json();
 
   prepareObjects(jsonData);
-  // displayList(jsonData);
 }
 
 function prepareObjects(jsonData) {
@@ -91,7 +93,6 @@ function setFilter(filter) {
 }
 
 function filterList(filteredList) {
-  // let filteredList = allStudents;
   if (settings.filterBy === "gryffindor") {
     filteredList = allStudents.filter(isGryffindor);
   } else if (settings.filterBy === "hufflepuff") {
@@ -100,9 +101,11 @@ function filterList(filteredList) {
     filteredList = allStudents.filter(isRavenclaw);
   } else if (settings.filterBy === "slytherin") {
     filteredList = allStudents.filter(isSlytherin);
+  } else if (settings.filterBy === "prefect") {
+    filteredList = allStudents.filter(isPrefect);
   }
   return filteredList;
-}
+} // filterList end
 
 function isGryffindor(student) {
   return student.house === "gryffindor";
@@ -115,6 +118,10 @@ function isRavenclaw(student) {
 }
 function isSlytherin(student) {
   return student.house === "slytherin";
+}
+
+function isPrefect(student) {
+  return student.prefect;
 }
 
 function selectSort(event) {
@@ -182,8 +189,23 @@ function displayList(students) {
     clone.querySelector(".gender").textContent = student.gender;
     clone.querySelector(".house").textContent = capitalization(student.house.trim());
     clone.querySelector("tr").className = student.house;
+    if (student.prefect) {
+      clone.querySelector(".prefect").textContent = "yes";
+    } else {
+      clone.querySelector(".prefect").textContent = "no";
+    }
+    clone.querySelector(".prefect").addEventListener("click", togglePrefect);
+
+    // togglePrefect start
+    function togglePrefect() {
+      if (student.prefect) {
+        student.prefect = false;
+      } else {
+        student.prefect = true;
+      }
+      buildList();
+    } // togglePrefect end
+
     contentDest.appendChild(clone);
   });
-}
-
-// function showDetails(student) {}
+} // displayList end
