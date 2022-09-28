@@ -32,6 +32,9 @@
   border-right: rgba(0, 0, 0, 0.3) 1px solid;
   border-left: rgba(0, 0, 0, 0.3) 1px solid;
 }
+th {
+  color: black;
+}
 tr {
   color: white;
   font-family: arial;

@@ -12,6 +12,11 @@ const studentObj = {
   gender: "",
   house: "",
 };
+const settings = {
+  filter: "all",
+  sortBy: "firstname",
+  sortDir: "asc",
+};
 
 function start() {
   console.log("start");
@@ -22,6 +27,7 @@ function start() {
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+  document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
 }
 
 async function loadJSON() {
@@ -46,21 +52,21 @@ function prepareObject(jsonObject) {
 
   if (fullName.includes(" ")) {
     student.firstname = fullName.substring(0, fullName.indexOf(" "));
+    student.lastname = fullName.substring(fullName.lastIndexOf(" ") + 1);
   } else {
     student.firstname = fullName;
+    student.lastname = "unknown";
   }
 
   if (!fullName.includes('"')) {
     student.middlename = fullName.substring(fullName.indexOf(" ") + 1, fullName.lastIndexOf(" ")).replaceAll('"', "");
-  }
-  student.lastname = fullName.substring(fullName.lastIndexOf(" ") + 1);
-  if (fullName.includes('"')) {
+  } else {
     student.nickname = fullName.substring(fullName.indexOf('"'), fullName.lastIndexOf('"') + 1);
   }
 
   student.gender = jsonObject.gender;
   // student.house = capitalization(jsonObject.house.trim());
-  student.house = jsonObject.house.toLowerCase();
+  student.house = jsonObject.house.toLowerCase().trim();
 
   return student;
 }
@@ -76,21 +82,26 @@ function capitalization(str) {
 
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
-  filterList(filter);
+  setFilter(filter);
 }
 
-function filterList(filterBy) {
-  let filteredList = allStudents;
-  if (filterBy === "gryffindor") {
+function setFilter(filter) {
+  settings.filterBy = filter;
+  buildList();
+}
+
+function filterList(filteredList) {
+  // let filteredList = allStudents;
+  if (settings.filterBy === "gryffindor") {
     filteredList = allStudents.filter(isGryffindor);
-  } else if (filterBy === "hufflepuff") {
+  } else if (settings.filterBy === "hufflepuff") {
     filteredList = allStudents.filter(isHufflepuff);
-  } else if (filterBy === "ravenclaw") {
+  } else if (settings.filterBy === "ravenclaw") {
     filteredList = allStudents.filter(isRavenclaw);
-  } else if (filterBy === "slytherin") {
+  } else if (settings.filterBy === "slytherin") {
     filteredList = allStudents.filter(isSlytherin);
   }
-  displayList(filteredList);
+  return filteredList;
 }
 
 function isGryffindor(student) {
@@ -106,25 +117,51 @@ function isSlytherin(student) {
   return student.house === "slytherin";
 }
 
-function sortList() {
-  const list = allStudents;
-  const sortedList = list.sort(sortByName);
-  displayList(sortedList);
+function selectSort(event) {
+  const sortBy = event.target.dataset.sort;
+  const sortDir = event.target.dataset.sortDirection;
+
+  if (sortDir === "asc") {
+    event.target.dataset.sortDirection = "desc";
+  } else {
+    event.target.dataset.sortDirection = "asc";
+  }
+
+  console.log(`user selected ${sortBy} - ${sortDir}`);
+  setSort(sortBy, sortDir);
+}
+function setSort(sortBy, sortDir) {
+  settings.sortBy = sortBy;
+  settings.sortDir = sortDir;
+  buildList();
 }
 
-function sortByName(studentA, studentB) {
-  if (studentA.firstname < studentB.firstname) {
-    return -1;
+function sortList(sortedList) {
+  // let sortedList = allStudents;
+  let direction = 1;
+  if (settings.sortDir === "desc") {
+    direction = -1;
   } else {
-    return 1;
+    settings.direction = 1;
   }
+  sortedList = sortedList.sort(sortByProperty);
+
+  function sortByProperty(studentA, studentB) {
+    if (studentA[settings.sortBy] < studentB[settings.sortBy]) {
+      return -1 * direction;
+    } else {
+      return 1 * direction;
+    }
+  }
+  return sortedList;
 }
 
 function buildList() {
   console.log("buildlist function");
-  // const currentList = filterList(allStudents);
+  const currentList = filterList(allStudents);
+  const sortedList = sortList(currentList);
 
-  displayList(allStudents);
+  displayList(sortedList);
 }
 
 function displayList(students) {
@@ -139,7 +176,8 @@ function displayList(students) {
     clone.querySelector(".middlename").textContent = student.middlename;
     clone.querySelector(".lastname").textContent = student.lastname;
     clone.querySelector(".gender").textContent = student.gender;
-    clone.querySelector(".house").textContent = student.house;
+    clone.querySelector(".house").textContent = capitalization(student.house.trim());
+    clone.querySelector("tr").className = student.house;
     contentDest.appendChild(clone);
   });
 }
