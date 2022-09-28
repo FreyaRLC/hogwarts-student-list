@@ -1,3 +1,10 @@
+html {
+  --main-gryff-color: #c73838;
+  --main-huff-color: #c2ab44;
+  --main-raven-color: #103e53;
+  --main-slyth-color: #065b4b;
+}
+
 [data-action] {
   cursor: pointer;
 }
@@ -39,21 +46,22 @@ tr {
   color: white;
   font-family: arial;
 }
+
 .gryffindor,
 button[data-filter="gryffindor"] {
-  background-color: #c73838;
+  background-color: var(--main-gryff-color);
 }
 .hufflepuff,
 button[data-filter="hufflepuff"] {
-  background-color: #c2ab44;
+  background-color: var(--main-huff-color);
 }
 .ravenclaw,
 button[data-filter="ravenclaw"] {
-  background-color: #103e53;
+  background-color: var(--main-raven-color);
 }
 .slytherin,
 button[data-filter="slytherin"] {
-  background-color: #065b4b;
+  background-color: var(--main-slyth-color);
 }
 
 button {
