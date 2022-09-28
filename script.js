@@ -15,7 +15,7 @@ const studentObj = {
 const settings = {
   filter: "all",
   sortBy: "firstname",
-  sortDir: "asc",
+  sortDir: undefined,
 };
 
 function start() {
@@ -120,6 +120,10 @@ function isSlytherin(student) {
 function selectSort(event) {
   const sortBy = event.target.dataset.sort;
   const sortDir = event.target.dataset.sortDirection;
+
+  const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
+  oldElement.classList.remove("sortby");
+  event.target.classList.add("sortby");
 
   if (sortDir === "asc") {
     event.target.dataset.sortDirection = "desc";

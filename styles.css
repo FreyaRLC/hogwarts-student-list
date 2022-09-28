@@ -14,11 +14,11 @@ html {
 }
 
 #sorting th.sortby[data-sort-direction="asc"]::after {
-  content: "⇓";
+  content: "⇑";
 }
 
 #sorting th.sortby[data-sort-direction="desc"]::after {
-  content: "⇑";
+  content: "⇓";
 }
 
 #list {
@@ -41,6 +41,9 @@ html {
 }
 th {
   color: black;
+  min-width: 110px !important;
+  padding: 10px 0;
+  text-align: start;
 }
 tr {
   color: white;
